@@ -21,22 +21,22 @@ async function openUrl(url: string): Promise<LogosCommandResult> {
 
 export async function navigateToPassage(reference: string): Promise<LogosCommandResult> {
   const logosRef = toLogosUrlRef(reference);
-  return openUrl(`logos4:///Bible/${logosRef}`);
+  return openUrl(`https://ref.ly/${logosRef}`);
 }
 
 export async function searchBibleInLogos(query: string): Promise<LogosCommandResult> {
   const encoded = encodeURIComponent(query);
-  return openUrl(`logos4:///Search?type=Bible&q=${encoded}`);
+  return openUrl(`https://ref.ly/logos4/Search?type=Bible&q=${encoded}`);
 }
 
 export async function openWordStudy(word: string): Promise<LogosCommandResult> {
   const encoded = encodeURIComponent(word);
-  return openUrl(`logos4:///WordStudy?word=${encoded}`);
+  return openUrl(`https://ref.ly/logos4/WordStudy?word=${encoded}`);
 }
 
 export async function openFactbook(topic: string): Promise<LogosCommandResult> {
   const encoded = encodeURIComponent(topic);
-  return openUrl(`logos4:///Factbook?ref=${encoded}`);
+  return openUrl(`https://ref.ly/logos4/Factbook?ref=${encoded}`);
 }
 
 export async function openResource(
@@ -64,7 +64,7 @@ export async function openGuide(
   try {
     const logosRef = toLogosUrlRef(reference);
     const template = encodeURIComponent(guideType);
-    return openUrl(`logos4:///Guide?t=${template}&ref=bible.${logosRef}`);
+    return openUrl(`https://ref.ly/logos4/Guide?t=${template}&ref=bible.${logosRef}`);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     return { success: false, command: "", error: msg };
@@ -73,7 +73,7 @@ export async function openGuide(
 
 export async function searchAll(query: string): Promise<LogosCommandResult> {
   const encoded = encodeURIComponent(query);
-  return openUrl(`logos4:///Search?kind=AllSearch&syntax=v2&q=${encoded}`);
+  return openUrl(`https://ref.ly/logos4/Search?kind=AllSearch&syntax=v2&q=${encoded}`);
 }
 
 export async function isLogosRunning(): Promise<boolean> {
