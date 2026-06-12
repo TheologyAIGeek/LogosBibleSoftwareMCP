@@ -19,14 +19,25 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that c
 
 ## Setup
 
-### 1. Clone the repo
+### 1. Install Node.js
+
+Download and install Node.js v18 or higher from **https://nodejs.org** (choose the LTS version). This also installs `npm`.
+
+After installing, open a new terminal and verify:
+
+```bash
+node --version
+npm --version
+```
+
+### 3. Clone the repo
 
 ```bash
 git clone https://github.com/TheologyAIGeek/LogosBibleSoftwareMCP.git
 cd LogosBibleSoftwareMCP
 ```
 
-### 2. Install dependencies and build
+### 4. Install dependencies and build
 
 ```bash
 cd logos-mcp-server
@@ -35,13 +46,13 @@ npm run build
 cd ..
 ```
 
-### 3. Get a Biblia API key
+### 5. Get a Biblia API key
 
 1. Go to [bibliaapi.com](https://bibliaapi.com/)
 2. Sign up for a free account
 3. Copy your API key
 
-### 4. Create `.mcp.json` in the project root
+### 6. Create `.mcp.json` in the project root
 
 ```json
 {
@@ -57,13 +68,13 @@ cd ..
 }
 ```
 
-### 5. Create `.env` in the project root (optional, for development)
+### 7. Create `.env` in the project root (optional, for development)
 
 ```
 BIBLIA_API_KEY=your_api_key_here
 ```
 
-### 6. Verify it works
+### 8. Verify it works
 
 ```bash
 claude
