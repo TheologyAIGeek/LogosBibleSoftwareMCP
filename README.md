@@ -76,11 +76,36 @@ BIBLIA_API_KEY=your_api_key_here
 
 ### 8. Verify it works
 
+**Claude Code (CLI):**
 ```bash
 claude
 ```
-
 Once Claude Code starts, type `/mcp` to check that the "logos" server appears with 20 tools.
+
+**Claude Desktop:**
+
+If you prefer to use Claude Desktop instead of (or in addition to) the CLI, add the server to Claude Desktop's config file:
+
+- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "logos": {
+      "command": "node",
+      "args": ["C:\\path\\to\\LogosBibleSoftwareMCP\\logos-mcp-server\\dist\\index.js"],
+      "env": {
+        "BIBLIA_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+Replace the path in `args` with the full absolute path to where you cloned the repo. On macOS use forward slashes: `"/path/to/LogosBibleSoftwareMCP/logos-mcp-server/dist/index.js"`.
+
+Restart Claude Desktop after saving, and the 20 Logos tools will be available there.
 
 ## Available Tools
 
