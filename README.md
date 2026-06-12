@@ -22,8 +22,8 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that c
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/robrawks/LogosInteraction.git
-cd LogosInteraction
+git clone https://github.com/TheologyAIGeek/LogosBibleSoftwareMCP.git
+cd LogosBibleSoftwareMCP
 ```
 
 ### 2. Install dependencies and build
@@ -154,7 +154,7 @@ The agent will ask what you want to study and guide you through Scripture using 
 ## Project Structure
 
 ```
-LogosInteraction/
+LogosBibleSoftwareMCP/
 ├── .claude/
 │   └── agents/
 │       └── socratic-bible-study.md    # Socratic agent definition
