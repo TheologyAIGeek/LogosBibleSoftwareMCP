@@ -1,22 +1,41 @@
 import { homedir } from "os";
 import { join } from "path";
+import { readdirSync, statSync, existsSync } from "fs";
 
 // ─── Logos Data Paths ────────────────────────────────────────────────────────
 
-function getLogosBase(): string {
-  if (process.platform === "win32") {
-    const appData = process.env.APPDATA ?? join(homedir(), "AppData", "Roaming");
-    return join(appData, "Logos4", "Documents", "a3wo155q.w14");
+function findInstallId(parentDir: string): string | null {
+  if (!existsSync(parentDir)) return null;
+  try {
+    const entries = readdirSync(parentDir)
+      .filter(e => /^[a-z0-9]+\.w14$/i.test(e))
+      .map(e => ({ name: e, mtime: statSync(join(parentDir, e)).mtimeMs }))
+      .sort((a, b) => b.mtime - a.mtime);
+    return entries[0]?.name ?? null;
+  } catch {
+    return null;
   }
-  return join(homedir(), "Library", "Application Support", "Logos4", "Documents", "a3wo155q.w14");
+}
+
+function getLogosRoot(): string {
+  if (process.platform === "win32") {
+    return join(process.env.APPDATA ?? join(homedir(), "AppData", "Roaming"), "Logos4");
+  }
+  return join(homedir(), "Library", "Application Support", "Logos4");
+}
+
+function getLogosBase(): string {
+  const root = getLogosRoot();
+  const docsDir = join(root, "Documents");
+  const id = findInstallId(docsDir) ?? "a3wo155q.w14";
+  return join(docsDir, id);
 }
 
 function getLogosCatalogBase(): string {
-  if (process.platform === "win32") {
-    const appData = process.env.APPDATA ?? join(homedir(), "AppData", "Roaming");
-    return join(appData, "Logos4", "Data", "a3wo155q.w14");
-  }
-  return join(homedir(), "Library", "Application Support", "Logos4", "Data", "a3wo155q.w14");
+  const root = getLogosRoot();
+  const dataDir = join(root, "Data");
+  const id = findInstallId(dataDir) ?? "a3wo155q.w14";
+  return join(dataDir, id);
 }
 
 const LOGOS_BASE = getLogosBase();

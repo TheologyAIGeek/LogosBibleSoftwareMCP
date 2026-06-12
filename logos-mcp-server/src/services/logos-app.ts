@@ -8,7 +8,8 @@ const execFileAsync = promisify(execFile);
 async function openUrl(url: string): Promise<LogosCommandResult> {
   try {
     if (process.platform === "win32") {
-      await execFileAsync("cmd", ["/c", "start", "", url]);
+      // Use PowerShell Start-Process to safely open URLs containing & without cmd.exe splitting on it
+      await execFileAsync("powershell", ["-Command", `Start-Process '${url.replace(/'/g, "''")}'`]);
     } else {
       await execFileAsync("open", [url]);
     }
