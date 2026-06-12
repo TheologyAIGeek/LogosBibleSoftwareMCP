@@ -170,7 +170,7 @@ LogosInteraction/
 │   │   └── services/
 │   │       ├── reference-parser.ts    # Bible reference normalization
 │   │       ├── biblia-api.ts          # Biblia.com REST API client
-│   │       ├── logos-app.ts           # macOS URL scheme / AppleScript
+│   │       ├── logos-app.ts           # URL scheme launcher (macOS + Windows)
 │   │       ├── sqlite-reader.ts       # Read-only Logos SQLite access
 │   │       └── catalog-reader.ts     # Library catalog search (catalog.db)
 │   └── dist/                          # Built output (after npm run build)
@@ -186,11 +186,10 @@ The MCP server integrates with Logos through three channels:
 
 ## Logos Data Path
 
-The server expects Logos data at:
+The server auto-detects the default Logos data path based on your OS:
 
-```
-~/Library/Application Support/Logos4/Documents/a3wo155q.w14/
-```
+- **macOS:** `~/Library/Application Support/Logos4/Documents/a3wo155q.w14/`
+- **Windows:** `%APPDATA%\Logos4\Documents\a3wo155q.w14\`
 
 If your Logos data is at a different path, set the `LOGOS_DATA_DIR` environment variable in `.mcp.json`. The library catalog lives under `Data/` (not `Documents/`) — set `LOGOS_CATALOG_DIR` if your catalog path differs:
 
@@ -214,7 +213,7 @@ If your Logos data is at a different path, set the `LOGOS_DATA_DIR` environment 
 
 **"BIBLIA_API_KEY is not set"** - Make sure your `.mcp.json` has the `env` block with your API key.
 
-**"Database not found"** - Your Logos data path may differ. Run `find ~/Library/Application\ Support/Logos4 -name "*.db" -maxdepth 5` to find your databases and update `LOGOS_DATA_DIR`.
+**"Database not found"** - Your Logos data path may differ. On macOS run `find ~/Library/Application\ Support/Logos4 -name "*.db" -maxdepth 5`; on Windows run `dir /s /b "%APPDATA%\Logos4\*.db"` to find your databases and update `LOGOS_DATA_DIR`.
 
 **Tools don't appear in `/mcp`** - Restart Claude Code. The MCP server is loaded at startup from `.mcp.json`.
 
