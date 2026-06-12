@@ -11,8 +11,8 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that c
 
 | Requirement | Details |
 |-------------|---------|
-| **macOS** | Required (uses macOS `open` command and AppleScript for Logos integration) |
-| **Logos Bible Software** | Installed at `/Applications/Logos.app` (tested with v48) |
+| **OS** | macOS or Windows (macOS uses `open` + AppleScript; Windows uses `cmd /c start` + `tasklist`) |
+| **Logos Bible Software** | Installed (tested with v48; macOS: `/Applications/Logos.app`, Windows: default install location) |
 | **Node.js** | v18+ (v23+ recommended for native `fetch` support) |
 | **Claude Code** | Anthropic's CLI tool ([install guide](https://docs.anthropic.com/en/docs/claude-code)) |
 | **Biblia API Key** | Free key from [bibliaapi.com](https://bibliaapi.com/) |
@@ -170,7 +170,7 @@ LogosInteraction/
 │   │   └── services/
 │   │       ├── reference-parser.ts    # Bible reference normalization
 │   │       ├── biblia-api.ts          # Biblia.com REST API client
-│   │       ├── logos-app.ts           # macOS URL scheme / AppleScript
+│   │       ├── logos-app.ts           # URL scheme launcher (macOS + Windows)
 │   │       ├── sqlite-reader.ts       # Read-only Logos SQLite access
 │   │       └── catalog-reader.ts     # Library catalog search (catalog.db)
 │   └── dist/                          # Built output (after npm run build)
@@ -181,16 +181,15 @@ LogosInteraction/
 The MCP server integrates with Logos through three channels:
 
 - **Biblia API** - Retrieves Bible text and search results via the free REST API from Faithlife (same company as Logos)
-- **macOS URL schemes** - Opens passages, word studies, and factbook entries directly in the Logos app using `logos4:///` URLs
+- **URL schemes** - Opens passages, word studies, and factbook entries directly in the Logos app using `logos4:///` URLs (works on macOS and Windows)
 - **SQLite databases** - Reads your personal data (notes, highlights, favorites, workflows, reading plans) and library catalog directly from the Logos local database files (read-only access, never modifies your data)
 
 ## Logos Data Path
 
-The server expects Logos data at:
+The server auto-detects the default Logos data path based on your OS:
 
-```
-~/Library/Application Support/Logos4/Documents/a3wo155q.w14/
-```
+- **macOS:** `~/Library/Application Support/Logos4/Documents/a3wo155q.w14/`
+- **Windows:** `%APPDATA%\Logos4\Documents\a3wo155q.w14\`
 
 If your Logos data is at a different path, set the `LOGOS_DATA_DIR` environment variable in `.mcp.json`. The library catalog lives under `Data/` (not `Documents/`) — set `LOGOS_CATALOG_DIR` if your catalog path differs:
 
@@ -214,7 +213,7 @@ If your Logos data is at a different path, set the `LOGOS_DATA_DIR` environment 
 
 **"BIBLIA_API_KEY is not set"** - Make sure your `.mcp.json` has the `env` block with your API key.
 
-**"Database not found"** - Your Logos data path may differ. Run `find ~/Library/Application\ Support/Logos4 -name "*.db" -maxdepth 5` to find your databases and update `LOGOS_DATA_DIR`.
+**"Database not found"** - Your Logos data path may differ. On macOS run `find ~/Library/Application\ Support/Logos4 -name "*.db" -maxdepth 5`; on Windows run `dir /s /b "%APPDATA%\Logos4\*.db"` to find your databases and update `LOGOS_DATA_DIR`.
 
 **Tools don't appear in `/mcp`** - Restart Claude Code. The MCP server is loaded at startup from `.mcp.json`.
 
