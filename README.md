@@ -11,8 +11,8 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that c
 
 | Requirement | Details |
 |-------------|---------|
-| **macOS** | Required (uses macOS `open` command and AppleScript for Logos integration) |
-| **Logos Bible Software** | Installed at `/Applications/Logos.app` (tested with v48) |
+| **OS** | macOS or Windows (macOS uses `open` + AppleScript; Windows uses `cmd /c start` + `tasklist`) |
+| **Logos Bible Software** | Installed (tested with v48; macOS: `/Applications/Logos.app`, Windows: default install location) |
 | **Node.js** | v18+ (v23+ recommended for native `fetch` support) |
 | **Claude Code** | Anthropic's CLI tool ([install guide](https://docs.anthropic.com/en/docs/claude-code)) |
 | **Biblia API Key** | Free key from [bibliaapi.com](https://bibliaapi.com/) |
@@ -181,7 +181,7 @@ LogosInteraction/
 The MCP server integrates with Logos through three channels:
 
 - **Biblia API** - Retrieves Bible text and search results via the free REST API from Faithlife (same company as Logos)
-- **macOS URL schemes** - Opens passages, word studies, and factbook entries directly in the Logos app using `logos4:///` URLs
+- **URL schemes** - Opens passages, word studies, and factbook entries directly in the Logos app using `logos4:///` URLs (works on macOS and Windows)
 - **SQLite databases** - Reads your personal data (notes, highlights, favorites, workflows, reading plans) and library catalog directly from the Logos local database files (read-only access, never modifies your data)
 
 ## Logos Data Path

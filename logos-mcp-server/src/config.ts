@@ -3,27 +3,29 @@ import { join } from "path";
 
 // ─── Logos Data Paths ────────────────────────────────────────────────────────
 
-const LOGOS_BASE = join(
-  homedir(),
-  "Library",
-  "Application Support",
-  "Logos4",
-  "Documents",
-  "a3wo155q.w14"
-);
+function getLogosBase(): string {
+  if (process.platform === "win32") {
+    const appData = process.env.APPDATA ?? join(homedir(), "AppData", "Roaming");
+    return join(appData, "Logos4", "Documents", "a3wo155q.w14");
+  }
+  return join(homedir(), "Library", "Application Support", "Logos4", "Documents", "a3wo155q.w14");
+}
+
+function getLogosCatalogBase(): string {
+  if (process.platform === "win32") {
+    const appData = process.env.APPDATA ?? join(homedir(), "AppData", "Roaming");
+    return join(appData, "Logos4", "Data", "a3wo155q.w14");
+  }
+  return join(homedir(), "Library", "Application Support", "Logos4", "Data", "a3wo155q.w14");
+}
+
+const LOGOS_BASE = getLogosBase();
 
 export const LOGOS_DATA_DIR =
   process.env.LOGOS_DATA_DIR ?? LOGOS_BASE;
 
 // Catalog DB lives under Data/ (not Documents/)
-const LOGOS_CATALOG_BASE = join(
-  homedir(),
-  "Library",
-  "Application Support",
-  "Logos4",
-  "Data",
-  "a3wo155q.w14"
-);
+const LOGOS_CATALOG_BASE = getLogosCatalogBase();
 
 export const LOGOS_CATALOG_DIR =
   process.env.LOGOS_CATALOG_DIR ?? LOGOS_CATALOG_BASE;
