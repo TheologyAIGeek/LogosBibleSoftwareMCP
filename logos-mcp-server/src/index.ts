@@ -7,7 +7,7 @@ import { SERVER_NAME, SERVER_VERSION } from "./config.js";
 
 // Service imports
 import { getBibleText, searchBible, scanReferences, comparePassages, getAvailableBibles } from "./services/biblia-api.js";
-import { navigateToPassage, openWordStudy, openFactbook, openResource, openGuide, searchAll } from "./services/logos-app.js";
+import { navigateToPassage, openWordStudy, openFactbook, openResource, openGuide, searchAll, searchLibrary } from "./services/logos-app.js";
 import { expandRange } from "./services/reference-parser.js";
 import {
   getUserHighlights,
@@ -409,6 +409,21 @@ async function main() {
         const msg = e instanceof Error ? e.message : String(e);
         return err(`Library catalog error: ${msg}`);
       }
+    }
+  );
+
+  // ── 21. search_library ───────────────────────────────────────────────────
+  server.tool(
+    "search_library",
+    "Search only your owned Logos resources using Smart search. Supports natural language queries like 'John 3:16 referenced in The Whole Works of Thomas Boston' or 'atonement in Puritan commentaries'.",
+    {
+      query: z.string().describe("Natural language search query scoped to your owned books (e.g., 'John 3:16 in Thomas Boston', 'justification near faith Calvin')"),
+    },
+    async ({ query }) => {
+      const result = await searchLibrary(query);
+      return result.success
+        ? text(`Opened Logos library search for "${query}".`)
+        : err(`Failed to open search: ${result.error}`);
     }
   );
 

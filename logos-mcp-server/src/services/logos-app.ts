@@ -77,6 +77,11 @@ export async function searchAll(query: string): Promise<LogosCommandResult> {
   return openUrl(`https://ref.ly/logos4/Search?kind=AllSearch&syntax=v2&q=${encoded}`);
 }
 
+export async function searchLibrary(query: string): Promise<LogosCommandResult> {
+  const encoded = encodeURIComponent(query);
+  return openUrl(`https://ref.ly/logos4/Search?kind=BooksSearch&q=${encoded}`);
+}
+
 export async function isLogosRunning(): Promise<boolean> {
   try {
     if (process.platform === "win32") {
