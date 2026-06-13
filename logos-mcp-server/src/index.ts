@@ -7,7 +7,7 @@ import { SERVER_NAME, SERVER_VERSION } from "./config.js";
 
 // Service imports
 import { getBibleText, searchBible, scanReferences, comparePassages, getAvailableBibles } from "./services/biblia-api.js";
-import { navigateToPassage, openWordStudy, openFactbook, openResource, openGuide, searchAll, searchLibrary } from "./services/logos-app.js";
+import { navigateToPassage, openWordStudy, openFactbook, openResource, openGuide, searchAll, searchLibrary, sanitizeSearchQuery } from "./services/logos-app.js";
 import { expandRange } from "./services/reference-parser.js";
 import {
   getUserHighlights,
@@ -421,8 +421,9 @@ async function main() {
     },
     async ({ query }) => {
       const result = await searchLibrary(query);
+      const actual = sanitizeSearchQuery(query);
       return result.success
-        ? text(`Opened Logos library search for "${query}". The results are displayed in Logos — review them there.`)
+        ? text(`Opened Logos library search for "${actual}". The results are displayed in Logos — review them there.`)
         : err(`Failed to open search: ${result.error}`);
     }
   );

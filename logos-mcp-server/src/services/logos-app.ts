@@ -72,13 +72,41 @@ export async function openGuide(
   }
 }
 
+// Conversational framing words that Logos Smart search would otherwise match
+// literally, polluting results. Stripped before the query reaches Logos.
+const FRAMING_WORDS = new Set([
+  "say", "says", "said", "saying",
+  "speak", "speaks", "spoke", "spoken", "speaking",
+  "write", "writes", "wrote", "written", "writing",
+  "tell", "tells", "told", "telling",
+  "think", "thinks", "thought", "thinking",
+  "teach", "teaches", "taught", "teaching",
+  "talk", "talks", "talked", "talking",
+  "comment", "comments", "commented",
+  "what", "did", "does", "do", "about", "regarding", "concerning",
+  "me", "us", "tell",
+]);
+
+export function sanitizeSearchQuery(query: string): string {
+  const cleaned = query
+    .split(/\s+/)
+    .filter((word) => {
+      const bare = word.replace(/[^\w']/g, "").toLowerCase();
+      return bare.length > 0 && !FRAMING_WORDS.has(bare);
+    })
+    .join(" ")
+    .trim();
+  // If stripping removed everything, fall back to the original query
+  return cleaned.length > 0 ? cleaned : query;
+}
+
 export async function searchAll(query: string): Promise<LogosCommandResult> {
   const encoded = encodeURIComponent(query);
   return openUrl(`https://ref.ly/logos4/Search?kind=AllSearch&syntax=v2&q=${encoded}`);
 }
 
 export async function searchLibrary(query: string): Promise<LogosCommandResult> {
-  const encoded = encodeURIComponent(query);
+  const encoded = encodeURIComponent(sanitizeSearchQuery(query));
   return openUrl(`https://ref.ly/logos4/Search?kind=BooksSearch&q=${encoded}`);
 }
 
