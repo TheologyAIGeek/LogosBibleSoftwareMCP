@@ -415,14 +415,14 @@ async function main() {
   // ── 21. search_library ───────────────────────────────────────────────────
   server.tool(
     "search_library",
-    "Search only your owned Logos resources using Smart search. Supports natural language queries like 'John 3:16 referenced in The Whole Works of Thomas Boston' or 'atonement in Puritan commentaries'.",
+    "Search only your owned Logos resources using Smart search. Use this whenever the user asks what an author wrote, taught, or argued about a topic or passage — including 'what did X say about Y'. Construct the query as topic/passage + author or book title (e.g., 'John 3:16 Thomas Boston', 'justification Puritan', 'atonement in The Whole Works of Thomas Boston'). Always prefer this over search_all.",
     {
-      query: z.string().describe("Natural language search query scoped to your owned books (e.g., 'John 3:16 in Thomas Boston', 'justification near faith Calvin')"),
+      query: z.string().describe("Search query for your owned books. Use author + topic or passage form: 'John 3:16 Thomas Boston', 'covenant of grace Owen', 'Romans 8 Calvin commentary'. Do NOT use conversational phrasing like 'what did Boston say' — extract just the key terms."),
     },
     async ({ query }) => {
       const result = await searchLibrary(query);
       return result.success
-        ? text(`Opened Logos library search for "${query}".`)
+        ? text(`Opened Logos library search for "${query}". The results are displayed in Logos — review them there.`)
         : err(`Failed to open search: ${result.error}`);
     }
   );
